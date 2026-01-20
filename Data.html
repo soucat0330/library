@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data</title>
+    <script src="setting.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="prism.css">
+    <link rel="stylesheet" href="page_style.css">
+    <script src="prism.js"></script>
+</head>
+
+<body style="margin: 0;">
+    <nav>
+        <h1 style="margin: 0px; font-size: 32px;"><a href="./index.html" id="title">Soucat C++ Library</a></h1>
+    </nav>
+    <div id="Bcontainer">
+        <ol id="bread">
+            <li><a href="./index.html">TOP</a></li>
+            <li>データ構造</li>
+        </ol>
+    </div>
+    <div class="indent">
+        <h1>データ構造</h1>
+        <div class="indent">
+            <h2 id="Union-Find">Union-Find</h2>
+            <details>
+                <summary>
+                    実装（クリックで開く）
+                </summary>
+                <pre class="match-braces line-numbers"><code class="language-cpp">class UnionFind {
+public:
+  //@brief Union-Findのコンストラクタ
+  //@param n ノード数
+  UnionFind(int n) : PoS(n, -1) {}
+
+  //@brief 根を求める
+  //@param x ノード番号
+  //@return xの根のノード番号
+  int find(int x) {
+    if (PoS[x] &lt; 0) {
+      return x;
+    }
+    return (PoS[x] = find(PoS[x]));
+  }
+
+  //@brief 接続かを判定する
+  //@param x ノード1
+  //@param y ノード2
+  bool same(int x, int y) {
+    return (find(x) == find(y));
+  }
+
+  //@brief 連結要素数を数える
+  //@param x ノード番号
+  //@return xの連結要素数
+  int size(int x) {
+    return -PoS[find(x)];
+  }
+
+  //@brief 集合を繋げる
+  //@param x ノード1
+  //@param y ノード2
+  //@return 結合が行えたか(既に結合していた:false)
+  bool connect(int x, int y) {
+    x = find(x);
+    y = find(y);
+    if (x == y) return false;
+
+    if (-PoS[x] &lt; -PoS[y]) {
+      std::swap(x, y);
+    }
+    PoS[x] += PoS[y];
+    PoS[y] = x;
+    return true;
+  }
+private:
+  //@brief 親もしくは要素数(Parent or Size)
+  std::vector&lt;int&gt; PoS;
+};</code></pre>
+            </details>
+            <div>グラフのグループ分けを管理するデータ構造 所属判定,併合ができる</div>
+            <h3>Constructor</h3>
+            <div class="method">Union-Find(n: int)</div>
+            <div>ノード数がn個のUnionFindを作成する<br>時間計算量：\( O(n) \)<br>空間計算量：\( O(n) \)</div>
+            <h3>Methods</h3>
+            <ul>
+                <li>find</li>
+                <li>same</li>
+                <li>connect</li>
+                <li>size</li>
+            </ul>
+            <div class="indent">
+                <h3>find</h3>
+                <div class="method">find(x: int) : int</div>
+                <div>根のノード番号を取得する</div>
+                <h4>Parameters</h4>
+                <ul>
+                    <li><span class="b">x</span>: int</li>根を取得する対象のノード番号
+                </ul>
+                <div>
+                    <h4 class="inl">Returns</h4>　int - ノード番号を返す
+                </div>
+                <div>時間計算量：\( O(α(n)) \)<br>空間計算量：\( O(α(n)) \)</div>
+                <div>\( α(n) \)はアッカーマン関数の逆関数で\( n \leq 10^{80} \)に対して\( α(n) \leq 4 \)が成り立つ</div>
+                <br>
+                <h3>same</h3>
+                <div class="method">same(x: int, y: int) : boolean</div>
+                <div>二つのノードが接続かを判定する</div>
+                <h4>Parameters</h4>
+                <ul>
+                    <li><span class="b">x</span>: int</li>一つ目の判定対象のノード番号<li><span class="b">y</span>: int</li>
+                    二つ目の判定対象のノード番号
+                </ul>
+                <div>
+                    <h4 class="inl">Returns</h4>　boolean - 接続であればtrue, 接続でなければfalseを返す
+                </div>
+                <div>時間計算量：\( O(α(n)) \)<br>空間計算量：\( O(1) \)</div>
+                <br>
+                <h3>size</h3>
+                <div class="method">size(x: int) : int</div>
+                <div>ノードの連結成分数を取得する</div>
+                <h4>Parameters</h4>
+                <ul>
+                    <li><span class="b">x</span>: int</li>連結成分数を取得する対象のノード番号
+                </ul>
+                <div>
+                    <h4 class="inl">Returns</h4>　int - 連結成分数を返す
+                </div>
+                <div>時間計算量：\( O(α(n)) \)<br>空間計算量：\( O(1) \)</div>
+                <br>
+                <h3>connect</h3>
+                <div class="method">connect(x: int, y: int) : boolean</div>
+                <div>二つのノードを含むグラフを結合する</div>
+                <h4>Parameters</h4>
+                <ul>
+                    <li><span class="b">x</span>: int</li>一つ目の結合対象のノード番号<li><span class="b">y</span>: int</li>
+                    二つ目の結合対象のノード番号
+                </ul>
+                <div>
+                    <h4 class="inl">Returns</h4>　boolean - 二つのノードが既に結合でばなければtrue, 既に結合であればfalseを返す
+                </div>
+                <div>時間計算量：\( O(α(n)) \)<br>空間計算量：\( O(1) \)</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
