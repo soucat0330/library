@@ -1,5 +1,7 @@
 MathJax = {
     options: {
+        enableExplorer: false,
+        enableExplorerHelp: false, 
         enableMenu: false,
         menuOptions: {
             settings: {
@@ -10,4 +12,5 @@ MathJax = {
             }
         }
     }
+
 };
